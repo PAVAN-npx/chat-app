@@ -17,16 +17,15 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 mongoose
-  .connect(process.env.MONGO_URL, {
+  .connect("mongodb+srv://kellapavankumar79:191113807@cluster0.ekike.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => {
-    console.log("DB Connetion Successfull");
-  })
+  .then(() => console.log("MongoDB connected"))
   .catch((err) => {
-    console.log(err.message);
-  });
+    console.error("Error connecting to MongoDB:", err);
+    process.exit(1); // Exit process with failure
+  });
 
 app.get("/ping", (_req, res) => {
   return res.json({ msg: "Ping Successful" });
@@ -40,7 +39,7 @@ const server = app.listen(process.env.PORT, () =>
 );
 const io = socket(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://courageous-marigold-43a559.netlify.app",
     credentials: true,
   },
 });
